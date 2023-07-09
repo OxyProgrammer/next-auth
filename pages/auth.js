@@ -1,14 +1,13 @@
 import AuthForm from '../components/auth/auth-form';
-import { getSession } from 'next-auth/react';
+import { authOptions } from './api/auth/[...nextauth]';
+import { getServerSession } from 'next-auth/next';
 
 function AuthPage() {
   return <AuthForm />;
 }
 
-
 export async function getServerSideProps(context) {
-  const session = await getSession({ req: context.req });
-
+  const session = await getServerSession(context.req, context.res, authOptions);
   if (session) {
     return {
       redirect: {
@@ -17,11 +16,11 @@ export async function getServerSideProps(context) {
       },
     };
   } else {
-    return{
+    return {
       props: {
-        session
-      }
-    }
+        session,
+      },
+    };
   }
 }
 export default AuthPage;

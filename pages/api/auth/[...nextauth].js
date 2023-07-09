@@ -12,7 +12,7 @@ export const authOptions = {
     CredentialsProvider({
       async authorize(credentials) {
         const { email, password } = credentials;
-       
+
         if (!email || !password) {
           //Throwing error in this function will make Next auth library to redirect.
           //To prevent that, we are setting redirect:fasle in the signIn method in frontend.
@@ -40,15 +40,26 @@ export const authOptions = {
         const tokenContent = {
           id: user._id.toString(),
           email: user.email,
-          name: user.email,
+          isActive: true,
+          prop1:'prop1',
+          prop2:'prop2', 
+          name:user.email,
           image:
-            'https://www.pexels.com/photo/photography-of-a-guy-wearing-green-shirt-1222271/',
+          'https://www.pexels.com/photo/photography-of-a-guy-wearing-green-shirt-1222271/'
         };
         return tokenContent;
       },
     }),
   ],
-
+  callbacks: {
+    async jwt({ token, user }) {
+      return { ...token, ...user };
+    },
+    async session({ session, token, user }) {
+      session.user = token;
+      return session;
+    },
+  },
   jwt: {
     async encode({ secret, token }) {
       return jwt.sign(token, secret);
