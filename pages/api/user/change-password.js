@@ -13,7 +13,7 @@ async function handler(req, res) {
     res.status(400).json({ message: 'Old and New password needs to be supplied!' });
     return;
   }
-  
+
   const session = await getServerSession(req, res, authOptions);
   if (!session || !session.user) {
     res.status(401).json({ message: 'Not authenticated!' });
@@ -21,7 +21,6 @@ async function handler(req, res) {
   }
 
   const { email } = session.user;
-  // const email = 'test@email.com';
   const client = await connectToDatabase();
   const db = client.db();
 

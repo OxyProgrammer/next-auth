@@ -14,9 +14,7 @@ function ProfilePage() {
 }
 
 export async function getServerSideProps(context) {
-  // const session = await getSession({ req: context.req });
   const session = await getServerSession(context.req, context.res, authOptions);
-  console.log('Session from server side:', session);
   if (!session) {
     return {
       redirect: {
